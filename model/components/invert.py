@@ -27,10 +27,10 @@ class Invertible1x1Convolution(nn.Module):
 
         if reverse:
             if not hasattr(self, "W_inverse"):
-                W_inverse = W.float().inverse()
-                W_inverse = Variable(W_inverse[..., None])
+                W_inverse = W.float().inverse() # Invert Weights Matrix
+                W_inverse = Variable(W_inverse[..., None]) # (channels, channels, 1)
                 if z.type() == "torch.cuda.HalfTensor":
-                    W_inverse = W_inverse.half()
+                    W_inverse = W_inverse.half() # convert weights been inside to float16
                 self.W_inverse = W_inverse
             return F.conv1d(z, self.W_inverse, bias=None, stride=1, padding=0) # (batch_size, n_group, time / n_group)
         else:
